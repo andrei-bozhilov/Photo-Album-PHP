@@ -116,7 +116,7 @@ abstract class BaseController {
 	{
 		if (!$this->isLoggedIn()) {
 			$this->addErrorMessage("Please login first.");
-			$this -> redirectToUrl("/home");
+			$this -> redirectToUrl("/account/login");
 		}
 	}
 

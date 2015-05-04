@@ -12,7 +12,6 @@
 		<script type="application/javascript" src="/content/bower_components/jquery/dist/jquery.js"></script>
 		<script type="application/javascript" src="/content/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script type="application/javascript" src="/content/bower_components/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>
-		<script src="/content/scripts/queries.js"></script>
 		<script src="/content/scripts/actions.js"></script>
 		<script src="/content/scripts/domManipulations.js"></script>
 		<script src="/content/scripts/noty.js"></script>
@@ -38,18 +37,18 @@
 						<li class="<?php if($this->location == "home") echo "active"?>">
 							<a href="/home/index">Home</a>
 						</li>
-						<li>
-							<a href="/best/users">Best users</a>
+						<li class="<?php if($this->sub_location == "users") echo "active"?>">
+							<a href="/rank/users">Best users</a>
 						</li>
-						<li>
-							<a href="/best/albums">Best Albums</a>
+						<li class="<?php if($this->sub_location == "albums") echo "active"?>">
+							<a href="/rank/albums">Best Albums</a>
 						</li>
-							<li>
-							<a href="/best/pics">Best Pictures</a>
+							<li class="<?php if($this->sub_location == "pictures") echo "active"?>">
+							<a href="/rank/pictures">Best Pictures</a>
 						</li>
 					<?php if($this->isLoggedIn()) : ?>
 						<li class="<?php if($this->location == "my_albums") echo "active"?>">
-							<a href="/albums/index">My Albums</a>
+							<a href="/user/index">My Albums</a>
 						</li>
 						<?php endif; ?>
 					</ul>

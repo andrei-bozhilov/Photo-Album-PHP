@@ -3,27 +3,38 @@
 	<h2>The best app for sharing your favorite pictures</h2>
 </div>
 
-<h3 class="album-title no-hover"> Top 10 pictures </h3>
+<h3 class="album-title no-hover">Top 10 pictures</h3>
 <div class="slider-wrapper">
 	<div id="slider" class="slider-carousel">
 		<ul id="carousel" class="carousel-list">
+			<?php foreach ($this->pics as $pic) :?>			
 			<li class="slider-element">
 				<div>
-					<img src="http://files.parsetfss.com/bd42e52e-3ab7-41d8-99a9-eeb0d58a13cd/tfss-2876cc58-4804-4f77-a780-e3207d430e2a-Ddz.jpg">
+					<a class="no-styles" href="/home/album/<?php echo $pic['album_id']?>">
+					<?php echo '<img src="data:image/jpeg;base64,' . base64_encode($pic['pic']) . '"/>'; ?>
+					</a>
 				</div>
 			</li>
+			<?php endforeach?>		
 		</ul>
 	</div>
-	<div class="slider-prev" onclick="Actions.sliderPrev()"></div>
-	<div class="slider-next" onclick="Actions.sliderNext()"></div>
+	<div class="slider-prev" onclick="Actions.sliderPrev();"></div>
+	<div class="slider-next" onclick="Actions.sliderNext();"></div>
 </div>
 <div id="show-albums"></div>
 <script type="application/javascript" src="/content/bower_components/jquery/dist/jquery.js"></script>
 <script>
 
 	$(function() {
-		var scrollDiv = 0 + 80;
+		var scrollDiv = 650;
 		var i = 0;
+			$.ajax({
+					url : "/home/getAlbums/" + i++,
+					method : "GET"
+				}).success(function(data) {
+					var div = $('<div>').append(data).hide().fadeIn(500);
+					$('#show-albums').append(div);
+				});
 		$(window).scroll(function() {
 
 			var scrollTop = parseInt($('body').scrollTop());
@@ -37,7 +48,8 @@
 					url : "/home/getAlbums/" + i++,
 					method : "GET"
 				}).success(function(data) {
-					$('#show-albums').append(data).hide().fadeIn(500);
+					var div = $('<div>').append(data).hide().fadeIn(1000);
+					$('#show-albums').append(div);
 				});
 			}
 		});

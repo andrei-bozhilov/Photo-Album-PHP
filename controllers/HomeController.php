@@ -4,16 +4,17 @@ class HomeController extends BaseController {
 	protected function onInit() {
 		$this -> title = 'Welcome';
 		$this -> model = new HomeModel();
-		$this ->location = "home";
+		$this -> location = "home";
 	}
 
-	public function index($page = 0, $pageSize = 3) {
-		$this->renderView();
-		$this -> getAlbums($page, $pageSize);
-		
+	public function index() {
+		$this -> pics = $this -> model -> getTopTenPic();
+		$this -> renderView();
+		$this -> getAlbums();
 	}
 
 	public function getAlbums($page = 0, $pageSize = 6) {
+
 		$from = $page * $pageSize;
 		$albums_result = $this -> model -> getAlbumsWithPictures($from, $pageSize);
 
@@ -36,11 +37,17 @@ class HomeController extends BaseController {
 		}
 
 		$this -> albums = $albums;
-		$this->renderView(__FUNCTION__, true);
+		$this -> renderView(__FUNCTION__, true);
 	}
-	
-	public function album($id)
-	{
-		$this->renderView();
+
+	public function album($id) {
+		if (!ctype_digit($id)) {
+			$this -> redirectToUrl('/error');
+		}
+		$rating = $this -> model -> getAlbumRating($id);
+		$this -> rating = intval(round($rating[0]['value'], 0));
+		$this -> album = $this -> model -> getAlbumsWithPicturesById($id);
+		$this -> album_id = $id;
+		$this -> renderView();
 	}
 }

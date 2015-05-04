@@ -31,7 +31,7 @@ class AccountController extends BaseController {
 				} else {
 					$_SESSION['username'] = $username;
 					$this -> addInfoMessage("Login successfully!");
-					$this -> redirectToUrl("/albums/index");
+					$this -> redirectToUrl("/user/index");
 				}
 			}
 
@@ -63,7 +63,7 @@ class AccountController extends BaseController {
 				} else {
 					$_SESSION['username'] = $username;
 					$this -> addInfoMessage("Register successfully!");
-					$this -> redirectToUrl("/albums/index");
+					$this -> redirectToUrl("/user/index");
 				}
 			}
 		}
@@ -75,6 +75,10 @@ class AccountController extends BaseController {
 		$_SESSION['username'] = null;
 		$this -> addInfoMessage("Logout successfully!");
 		$this -> redirectToUrl("/home");
+		
+		
+		
+		
 	}
 
 }

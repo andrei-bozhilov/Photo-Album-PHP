@@ -1,10 +1,10 @@
 <?php
 
-class AlbumsController extends BaseController {
+class UserController extends BaseController {
 	
 	protected function onInit() {
 		$this -> title = 'My albums';
-		$this -> model = new AlbumsModel();
+		$this -> model = new UserModel();
 		$this -> location = "my_albums";
 		$this->sub_location = "";
 	}
@@ -60,5 +60,18 @@ class AlbumsController extends BaseController {
 		$this->sub_location = "user_pictures";
 		$this->renderView();
 	}
-
+	
+	public function rate_album($album_id, $value){
+		$this->authorized();
+		$user_id = $this->getUserId();
+		$result = $this->model->rate_album($album_id, $value, $user_id);
+		
+		if ($result) {
+			$this->addInfoMessage("Albums is rated.");
+		    $this->redirectToUrl('/home/album/' . $album_id);
+		}else{
+			$this->addInfoMessage("Sorry there was an error.");
+		}
+			
+	}
 }

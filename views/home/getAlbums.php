@@ -20,7 +20,11 @@
 				Rating
 			</section>
 			<section class="alb-rating-f">
-				3 / 10
+				<?php if ($album[0]['album_rating'] == null) :?>
+					rate me
+				<?php else :?>
+					<?php echo round($album[0]['album_rating'], 0) . "/10"; ?>
+				<?php endif ?>
 			</section>
 		</footer>
 		</a>

@@ -3,7 +3,7 @@
 class RankModel extends BaseModel {
 
 	public function getAlbumsWithPictures($from, $pageSize) {
-		$squery = "select a.id as album_id, a.name as album_name, p.name as pic_name, p.picture as pic
+		$query = "select a.id as album_id, a.name as album_name, p.name as pic_name, p.picture as pic
 		from pictures p
 		Inner JOIN (select * from albums limit ?, ?) a
 		 on a.id = p.album_id
@@ -11,7 +11,7 @@ class RankModel extends BaseModel {
 		Order by a.name";
 
 		
-		$statement = self::$db -> prepare($squery);
+		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("ii", $from, $pageSize);
 		$statement -> execute();
 		$result = $statement -> get_result();
@@ -25,7 +25,7 @@ class RankModel extends BaseModel {
 	}
 	
 	public function getAlbumsWithPicturesById($id) {
-		$squery = "select a.id as album_id, a.name as album_name, p.name as pic_name, p.picture as pic
+		$query = "select a.id as album_id, a.name as album_name, p.name as pic_name, p.picture as pic
 		from pictures p
 		Inner JOIN (select * from albums limit ?, ?) a
 		 on a.id = p.album_id
@@ -33,7 +33,7 @@ class RankModel extends BaseModel {
 		Order by a.name";
 
 		
-		$statement = self::$db -> prepare($squery);
+		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("i", $id);
 		$statement -> execute();
 		$result = $statement -> get_result();

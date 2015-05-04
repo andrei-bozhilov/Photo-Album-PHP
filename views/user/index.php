@@ -2,7 +2,7 @@
 	<h1>Here you can organize your photos</h1>
 </div>
 <div class="col-md-3">
-<?php include_once("/views/albums/user-navigation.php") ?>
+<?php include_once("/views/user/user-navigation.php") ?>
 </div>
 
 <div class="col-md-9">
@@ -30,7 +30,7 @@
 		var scrollDiv = 650;
 		var i = 0;
 			$.ajax({
-					url : "/albums/getAlbumsForCurrentUser/" + i++,
+					url : "/user/getAlbumsForCurrentUser/" + i++,
 					method : "GET"
 				}).success(function(data) {
 					$('#show-albums').append(data).hide().fadeIn(500);
@@ -45,7 +45,7 @@
 				scrollDiv = scrollTop + 650;
 
 				$.ajax({
-					url : "/albums/getAlbumsForCurrentUser/" + i++,
+					url : "/user/getAlbumsForCurrentUser/" + i++,
 					method : "GET"
 				}).success(function(data) {
 					$('#show-albums').append(data).hide().fadeIn(500);

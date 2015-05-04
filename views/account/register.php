@@ -1,4 +1,4 @@
-<div class="col-md-6 col-md-offset-1">
+<div class="col-md-6 col-md-offset-1 fadein">
 	<h2>Register</h2>
     <div class="panel">
         <form class="form-horizontal"  method="POST">

@@ -1,9 +1,6 @@
 var Actions = (function () {
-    var Picture = Parse.Object.extend("Picture"),
-        Category = Parse.Object.extend("Category"),
-        Album = Parse.Object.extend("Album"),
-        Comment = Parse.Object.extend("Comment"),
-        sliderMargin = 0;
+    
+       var sliderMargin = 0;
 
     function uploadPicture(name) {
         var file = validateFile('#image-file');

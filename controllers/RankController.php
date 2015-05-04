@@ -5,25 +5,26 @@ class RankController extends BaseController {
 	protected function onInit() {
 		$this -> title = 'Rank';
 		$this -> model = new RankModel();
-		$this -> location = "my_albums";
+		$this -> location = "";
 		$this->sub_location = "";
 	}
 
-	public function index($page = 0, $pageSize = 6) {
-		
-		$this->renderView();		
-		
+	public function index() {
+		$this->redirectToUrl('/rank/users');
 	}
 
 	public function users(){
+		$this->sub_location = "users";
 		$this->renderView();		
 	}
 	
 	public function albums(){
+		$this->sub_location = "albums";
 		$this->renderView();		
 	}
 	
 	public function pictures(){
+		$this->sub_location = "pictures";
 		$this->renderView();		
 	}
 
