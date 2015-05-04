@@ -1,0 +1,20 @@
+{
+  "name": "Gallery",
+  "version": "0.0.0",
+  "authors": [
+    "Andrey Bozhilov <andrei.bozhilov@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "noty": "~2.3.5",
+    "bootstrap": "~3.3.4"
+  }
+}
