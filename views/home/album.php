@@ -7,9 +7,9 @@
 <div class="col-md-12">
 	<section id="breadcrumbs">
 		<div>
-			<div class="hidden" id="albumId" data-album="<?php echo $this->album_id ?>"></div>
-			<div id="back-button" onclick="window.location.href = '/home'" class="back-button-change"></div>
-			<h1 class="pull-left"><?php echo htmlspecialchars($this->album[0]['album_name'])?></h1>
+			<div class="hidden" id="albumId" data-album="<?php echo $this->album['id'] ?>"></div>
+			<div id="back-button" onclick="history.go(-1);" class="back-button-change"></div>
+			<h1 class="pull-left"><?php echo htmlspecialchars($this->album['name'])?></h1>
 
 			<div id="rate-album" class="add-buttons" onclick="loadRateAlbum()" style="display: block;">
 				Rate album
@@ -19,8 +19,8 @@
 				<div>
 					<span class="glyphicon glyphicon-star"></span>No rating, yet
 				</div>
-				<?php else :?>
-					Rating: 
+				<?php else : ?>
+				Rating:
 				<?php for($i = 0; $i < $this->rating; $i++ ) :?>
 				<span class="glyphicon glyphicon-star" style="color:#168"></span>
 				<?php endfor; ?>
@@ -31,38 +31,76 @@
 			</div>
 		</div>
 	</section>
+	<section id="popup-album-comment-container">
+		<div class="col-md-6">
+		<section id="album-all-comments">
+			<ul>
+				<?php foreach ($this->comments as $comment) :?>
+				<li>
+					<header>
+						<span id="commentOf"> <?php echo htmlentities($comment['username']); ?></span>
+						<br>
+						<span id="commentDate">
+							<?php 
+							$date = new DateTime($comment['date']);
+							echo $date->format('d-M-Y');
+							 ?>
+						 </span>
+					</header>
+					<article id="album-comment-article">
+						<?php echo htmlentities($comment['comment']); ?>
+					</article>
+				</li>
+				<?php endforeach; ?>
+			</ul>
+		</section>
+		</div>
+		<div class="col-md-6">
+		<section id="add-album-comment">
+			<span class="small-album-title">Add a comment</span>
+			<form>
+				<textarea id="textareaAlbumComment" placeholder="Enter a comment"></textarea>
+				<div id="add-comment-button" class="add-buttons" onclick="addCommentToAlbum()">
+					Add comment
+				</div>
+			</form>
+		</section>
+		</div>
+	</section>
 </div>
 
-<?php foreach ($this->album as $album) :?>
+<div id="show-pics"></div>
 
-<div class="col-md-4 fadein">
-	<ul id="album-images-container">
-		<li>
-			<header>
-				<h3><?php echo htmlspecialchars($album['pic_name']); ?></h3>
-			</header>
-			<section>
-				<?php if ($album['pic'] == null) :?>
-				<img src="/content/images/noimage.jpg"/>
-				<div class="pic-hover" data-id= <?php echo  $album['pic_id'] ?> data-src="/content/images/noimage.jpg"></div>
-				<?php else : ?>
-				<?php echo '<img src="data:image/jpeg;base64,' . base64_encode($album['pic']) . '"/>'; ?> <div class="pic-hover" data-id= <?php echo  $album['pic_id'] ?> data-src=<?php echo '"data:image/jpeg;base64,' . base64_encode($album['pic']) . '"'; ?> ></div>
-				<?php endif ?>
-			</section>
-			<footer>
-				<section class="pic-date">
-					Date: 9.12.2014
-				</section>
-				<section class="pic-download">
-					<a href="http://files.parsetfss.com/bd42e52e-3ab7-41d8-99a9-eeb0d58a13cd/tfss-2ea78db2-0609-40b9-ac9a-4691d30fd4d3-Assembly.png">Download</a>
-				</section>
-				<section id="LZY2u9XSHy" class="pic-rating">
-					Rate me
-				</section>
-			</footer>
-		</li>
-	</ul>
-</div>
-<?php endforeach ?>
+<script>
+	$(function() {
+		var scrollDiv = 1000;
+		var albumId = $('#albumId').attr('data-album');
+		var i = 0;
+		$.ajax({
+			url : "/home/getPictures/" + albumId + "/" + i++,
+			method : "GET"
+		}).success(function(data) {
+			var div = $('<div>').append(data).hide().fadeIn(500);
+			$('#show-pics').append(div);
+		});
+		$(window).scroll(function() {
 
+			var scrollTop = parseInt($('body').scrollTop());
+
+			console.log(scrollTop);
+
+			if (scrollTop > scrollDiv) {
+				scrollDiv = scrollTop + 1000;
+
+				$.ajax({
+					url : "/home/getPictures/" + albumId + "/" + i++,
+					method : "GET"
+				}).success(function(data) {
+					var div = $('<div>').append(data).hide().fadeIn(1000);
+					$('#show-pics').append(div);
+				});
+			}
+		});
+	}); 
+</script>
 <?php endif ?>

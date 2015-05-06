@@ -8,7 +8,7 @@ class HomeController extends BaseController {
 	}
 
 	public function index() {
-		$this -> pics = $this -> model -> getTopTenPic();
+		$this -> pics = $this -> model -> getNewestPictures();
 		$this -> renderView();
 		$this -> getAlbums();
 	}
@@ -44,10 +44,30 @@ class HomeController extends BaseController {
 		if (!ctype_digit($id)) {
 			$this -> redirectToUrl('/error');
 		}
-		$rating = $this -> model -> getAlbumRating($id);
-		$this -> rating = intval(round($rating[0]['value'], 0));
-		$this -> album = $this -> model -> getAlbumsWithPicturesById($id);
-		$this -> album_id = $id;
+
+		$album = $this -> model -> getAlbumById($id);
+				
+		if ($album == null) {
+			$this -> album = null;
+		}else{
+			$this -> album = $album[0];
+			$rating = $this -> model -> getAlbumRating($id);
+			$this -> rating = round($rating[0]['value'], 0);
+			$this -> comments = $this -> model -> getAlbumComments($id);
+		}
+		
 		$this -> renderView();
 	}
+
+	public function getPictures($id, $page = 0, $pageSize = 12) {
+		$from = $page * $pageSize;
+		$this -> album = $this -> model -> getAlbumWithPicturesById($id, $from, $pageSize);
+		$this -> renderView(__FUNCTION__, true);
+	}
+
+	public function getPictureComments($id) {
+		$this -> comments = $this -> model -> getPictureComments($id);
+		$this -> renderView(__FUNCTION__, true);
+	}
+
 }

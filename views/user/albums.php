@@ -4,3 +4,5 @@
 <div class="col-md-3">
 <?php include_once("/views/user/user-navigation.php") ?>
 </div>
+
+<?php var_dump($this->albums) ?>

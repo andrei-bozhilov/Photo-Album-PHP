@@ -1,5 +1,6 @@
 </div>
 </div>
+<a href="#" class="scrollup"></a>
 <div id="popup-picture" class="popup">
 	<div class="bodysize-close-popup" onclick="closePopup()"></div>
 	<div id="popup-picture-container">
@@ -14,8 +15,6 @@
 			<section id="add-comment">
 				<span class="small-title">Add a comment</span>
 				<form>
-					<label for="name-for-pic-comment">Name: </label>
-					<input type="text" id="name-for-pic-comment">
 					<textarea id="comment-value"></textarea>
 					<div id="add-picture-comment-button" class="add-buttons">
 						Add comment

@@ -6,7 +6,7 @@ body {
 	font-size: 10px;
 }
 
-input[type="text"], input[type="password"]{
+input[type="text"], input[type="password"] {
 	font-size: 10px;
 }
 
@@ -46,8 +46,8 @@ html, body {
 	transition: all 0.3s;
 }
 
-.nav-app{
-	z-index:999;
+.nav-app {
+	z-index: 999;
 	height: 80px;
 	background: #111111;
 	color: #ffffff;
@@ -60,9 +60,9 @@ html, body {
 	padding-top: 15px;
 }
 
-.navbar-default .navbar-nav>.active>a , .navbar-default .navbar-nav>.active>a:hover{
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover {
 	background-color: #168;
-	color:white;
+	color: white;
 	-webkit-transition: all 0.3s;
 	-moz-transition: all 0.3s;
 	-ms-transition: all 0.3s;
@@ -71,9 +71,9 @@ html, body {
 	border-radius: 4px;
 }
 
-.navbar-default .navbar-nav>li>a:hover{
-	background-color:  #d9534f;
-	color:white;
+.navbar-default .navbar-nav > li > a:hover {
+	background-color: #d9534f;
+	color: white;
 	-webkit-transition: all 0.3s;
 	-moz-transition: all 0.3s;
 	-ms-transition: all 0.3s;
@@ -159,6 +159,11 @@ html, body {
 	background: #eeeeee;
 	border-bottom: 1px solid #dedede;
 	border-right: 1px solid #dedede;
+	-webkit-transition: all 0.4s ease;
+	-moz-transition: all 0.4s ease;
+	-ms-transition: all 0.4s ease;
+	-o-transition: all 0.4s ease;
+	transition: all 0.4s ease;
 }
 #bc span {
 	display: inline-block;
@@ -439,20 +444,14 @@ html, body {
 #album-all-comments {
 	overflow-y: scroll;
 	height: 250px;
-	float: left;
-	width: 55%;
 	padding-right: 5px;
 }
 
 #add-album-comment {
 	height: 230px;
-	width: 43%;
-	bottom: 0;
-	right: 0;
 	padding: 0 0px 0px 0px;
 	margin-bottom: 20px;
 	margin-left: 20px;
-	float: left;
 }
 
 #clearDiv {
@@ -690,7 +689,7 @@ article#album-comment-article {
 #popup-picture-container {
 	background: #ffffff;
 	z-index: 10;
-	margin: 50px 0 0 100px;
+	margin: 85px 0 0 100px;
 	overflow: hidden;
 	position: relative;
 }
@@ -901,8 +900,8 @@ article#album-comment-article {
 
 /*Input Range Style*/
 .slider {
-width: 200px;
-margin: 100px auto;
+	width: 200px;
+	margin: 100px auto;
 }
 
 input[type="range"] {
@@ -918,7 +917,7 @@ input[type="range"] {
 	box-shadow: inset 0 1px 0 0 #0d0e0f, inset 0 -1px 0 0 #3a3d42;
 	-webkit-box-shadow: inset 0 1px 0 0 #0d0e0f, inset 0 -1px 0 0 #3a3d42;
 	outline: none; /* no focus outline */
-	cursor:pointer;
+	cursor: pointer;
 }
 
 input[type="range"]::-moz-range-track {
@@ -968,7 +967,7 @@ input[type="range"]::-ms-thumb {
 	background-image: linear-gradient(to bottom, #529de1 0, #245e8f 100%); /* W3C */
 }
 
-.user-nav{
+.user-nav {
 	background: #111111;
 	color: #ffffff;
 	-webkit-transition: all 0.4s ease;
@@ -981,11 +980,11 @@ input[type="range"]::-ms-thumb {
 }
 
 a.no-styles {
-  color: inherit; /* blue colors for links too */
-  text-decoration: inherit; /* no underline */
+	color: inherit; /* blue colors for links too */
+	text-decoration: inherit; /* no underline */
 }
 
-.rating{
+.rating {
 	padding: 0 10px;
 	height: 32px;
 	font-size: 1.5em;
@@ -997,9 +996,23 @@ a.no-styles {
 	float: right;
 	line-height: 32px;
 	text-align: center;
-	-webkit-transition: opacity 0.2s;
-	-moz-transition: opacity 0.2s;
-	-ms-transition: opacity 0.2s;
-	-o-transition: opacity 0.2s;
-	transition: opacity 0.2s;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
 }
+
+.scrollup {
+	width: 40px;
+	height: 40px;
+	opacity: 0.9;
+	display:none;
+	position: fixed;
+	bottom: 50px;
+	right: 100px;
+	background-color:#168;
+	text-indent: -9999px;
+	z-index: 200;
+	content: url('/content/images/icon-up-arrow.png') no-repeat;
+	}

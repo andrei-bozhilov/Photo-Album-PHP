@@ -4,48 +4,6 @@
     function averageOfArray(arr) {
         return arr.reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / arr.length;
     }
- 
-    function loadPicturePopup(pic) {
-        var picId = pic.attr("data-id"),
-            picSrc = pic.attr("data-src");
-
-        $("#pic-shown")
-            .attr("src", picSrc)
-            .attr("data-id", picId);
-
-        Queries.getObjectById("Picture", picId)
-            .then(function (pic) {
-                Queries.getCommentsByPicture(pic)
-                    .then(function (comments) {
-                        loadPictureComments(comments);
-                    });
-            });
-    }
-
-    function loadPictureComments(comments) {
-        var ul = $("#pic-comments-list"),
-            li,
-            header,
-            author,
-            content,
-            date,
-            i;
-
-        ul.html("");
-
-        for (i in comments) {
-            author = comments[i].attributes.author;
-            content = comments[i].attributes.commentContent;
-            date = formatDate(comments[i].createdAt);
-            li = $("<li>");
-            header = $("<header>")
-                .append($("<span>").text(author))
-                .append($("<span>").text(date));
-            li.append(header)
-                .append($("<article>").append(content));
-            ul.append(li);
-        }
-    }
 
     function formatDate(obj) {
 
@@ -79,8 +37,6 @@
 
     return {
         averageOfArray: averageOfArray,
-        loadPicturePopup: loadPicturePopup,
-        loadPictureComments: loadPictureComments,
         changeRating: changeRating
     }
 })();
