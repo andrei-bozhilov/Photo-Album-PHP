@@ -14,57 +14,55 @@
 			<div id="rate-album" class="add-buttons" onclick="loadRateAlbum()" style="display: block;">
 				Rate album
 			</div>
-			<div class="rating">
-				<?php if($this->rating == null) :?>
-				<div>
-					<span class="glyphicon glyphicon-star"></span>No rating, yet
+				<div class="rating">
+					<?php if($this->rating == null) :?>
+					<div>
+						<span class="glyphicon glyphicon-star"></span>No rating, yet
+					</div>
+					<?php else : ?>
+					Rating:
+					<?php for($i = 0; $i < $this->rating; $i++ ) :?>
+					<span class="glyphicon glyphicon-star" style="color:#168"></span>
+					<?php endfor; ?>
+					<?php for($i = 0; $i < 10 - $this->rating; $i++ ) :?>
+					<span class="glyphicon glyphicon-star" style="color:red"></span>
+					<?php endfor; ?>
+					<?php endif ?>
 				</div>
-				<?php else : ?>
-				Rating:
-				<?php for($i = 0; $i < $this->rating; $i++ ) :?>
-				<span class="glyphicon glyphicon-star" style="color:#168"></span>
-				<?php endfor; ?>
-				<?php for($i = 0; $i < 10 - $this->rating; $i++ ) :?>
-				<span class="glyphicon glyphicon-star" style="color:red"></span>
-				<?php endfor; ?>
-				<?php endif ?>
-			</div>
 		</div>
 	</section>
 	<section id="popup-album-comment-container">
 		<div class="col-md-6">
-		<section id="album-all-comments">
-			<ul>
-				<?php foreach ($this->comments as $comment) :?>
-				<li>
-					<header>
-						<span id="commentOf"> <?php echo htmlentities($comment['username']); ?></span>
-						<br>
-						<span id="commentDate">
-							<?php 
+			<section id="album-all-comments">
+				<ul>
+					<?php foreach ($this->comments as $comment) :?>
+					<li>
+						<header>
+							<span id="commentOf"> <?php echo htmlentities($comment['username']); ?></span>
+							<br>
+							<span id="commentDate"> <?php
 							$date = new DateTime($comment['date']);
-							echo $date->format('d-M-Y');
-							 ?>
-						 </span>
-					</header>
-					<article id="album-comment-article">
-						<?php echo htmlentities($comment['comment']); ?>
-					</article>
-				</li>
-				<?php endforeach; ?>
-			</ul>
-		</section>
+							echo $date -> format('d-M-Y');
+								?> </span>
+						</header>
+						<article id="album-comment-article">
+							<?php echo htmlentities($comment['comment']); ?>
+						</article>
+					</li>
+					<?php endforeach; ?>
+				</ul>
+			</section>
 		</div>
 		<div class="col-md-6">
-		<section id="add-album-comment">
-			<span class="small-album-title">Add a comment</span>
-			<form>
-				<textarea id="textareaAlbumComment" placeholder="Enter a comment"></textarea>
-				<div id="add-comment-button" class="add-buttons" onclick="addCommentToAlbum()">
-					Add comment
-				</div>
-			</form>
-		</section>
+			<section id="add-album-comment">
+				<span class="small-album-title">Add a comment</span>
+				<form>
+					<textarea id="textareaAlbumComment" placeholder="Enter a comment"></textarea>
+					<div id="add-comment-button" class="add-buttons" onclick="addCommentToAlbum()">
+						Add comment
+					</div>
+				</form>
+			</section>
 		</div>
 	</section>
 </div>

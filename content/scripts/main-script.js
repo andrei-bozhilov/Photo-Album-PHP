@@ -1,50 +1,13 @@
-function addPictureToAlbum(event) {
-	var picName = document.getElementById('picture-name').value;
-
-	var openedAlbum = document.getElementById('opened-album-title');
-	var albumId = openedAlbum.getAttribute('class');
-
-	try {
-		var validPicName = validateString(picName, 'Picture name');
-		var picFile = Actions.uploadPicture(validPicName);
-
-		Queries.getObjectById('Album', albumId).then(function(album) {
-			Actions.addPictureToAlbum(validPicName, picFile, album).then(function() {
-				Queries.getLastSaveObject('Picture', function(pic) {
-					console.log(pic[0]);
-					createPictureItem(pic[0]);
-				});
-			});
-			closePopup();
-		});
-	} catch (error) {
-		// maybe log the error..
-	}
-}
-
-function createAlbum(event) {
-	var albumName = document.getElementById("album-name").value.trim(),
-	    a = document.getElementById("album-category"),
-	    categoryId = a.options[a.selectedIndex].value,
-	    regexValidate = new RegExp("(^[A-Za-z0-9]+[A-Za-z0-9 ][A-Za-z0-9 ]*$)");
-	document.getElementById("album-name").value = albumName;
-	console.log(albumName);
-	if (!albumName || albumName.length > 25 || !regexValidate.test(albumName)) {
-		alert("Album name should be between 0 and 25 symbols and should contain only latin letters, numbers, intervals and dashes.");
+function uploadImage(element) {
+	var file = element[0].files[0];
+	if (file.type.match(/image\/.*/)) {
+		var reader = new FileReader();
+		reader.onload = function() {
+			$('#image').attr('src', reader.result);
+		};
+		reader.readAsDataURL(file);
 	} else {
-		Queries.getObjectById("Category", categoryId).then(function(category) {
-			Actions.createAlbum(albumName, category);
-		}).then(function(result) {
-			Noty.success("Album created");
-			Queries.getLastSaveObject("Album", function(x) {
-				Dom.listAlbums(x);
-				openAlbum();
-				emptyFields();
-				Dom.openAnAlbum.call($('#' + x[0].objectId)[0]);
-
-			});
-			closePopup();
-		});
+		Noty.error("File your are trying to upload isn't a picture!");
 	}
 }
 
@@ -69,18 +32,18 @@ function addCommentToPicture(event) {
 	var commentInput = document.getElementById("comment-value"),
 	    comment = commentInput.value,
 	    albumId = $('#albumId').attr('data-album'),
-	    picId = $("#pic-shown").attr("data-id");	 
-	
+	    picId = $("#pic-shown").attr("data-id");
+
 	var data = {
-		albumId: albumId,
-		pictureId: picId,
-		text:comment
+		albumId : albumId,
+		pictureId : picId,
+		text : comment
 	};
 
 	$.ajax({
 		url : '/user/commentPicture',
 		method : 'POST',
-		data:data
+		data : data
 	}).success(function(data) {
 		$('body').html(data);
 	});
@@ -95,39 +58,19 @@ function addCommentToAlbum(event) {
 	console.log(commentInput);
 	console.log(comment);
 	console.log(albumId);
-	
+
 	var data = {
-		albumId: albumId,
-		text: comment
+		albumId : albumId,
+		text : comment
 	};
 
 	$.ajax({
 		url : '/user/commentAlbum',
 		method : 'POST',
-		data: data
+		data : data
 	}).success(function(data) {
 		$('body').hide().html(data).fadeIn(500);
 	});
-}
-
-function getSelectedTextFromSelect(elementId) {
-	var elt = document.getElementById(elementId);
-
-	if (elt.selectedIndex === -1)
-		return null;
-
-	return elt.options[elt.selectedIndex].text;
-}
-
-function validateString(value, varName) {
-	var trimmed = value.trim();
-	var regexValidate = new RegExp("(^[A-Za-z0-9]+[A-Za-z0-9 ][A-Za-z0-9 ]*$)");
-
-	if (!trimmed || trimmed.length > 25 || !regexValidate.test(trimmed)) {
-		throw new Error(varName + " should be between 0 and 25 symbols and should contain only latin letters, numbers, intervals and dashes.");
-	} else {
-		return trimmed;
-	}
 }
 
 // FRONT END SCRIPTS
@@ -181,24 +124,6 @@ function loadPopup(that) {
 	setSize();
 }
 
-function emptyFields() {
-	if (document.getElementById("name-for-album-comment")) {
-		document.getElementById("name-for-album-comment").value = '';
-	}
-
-	if (document.getElementById("textareaAlbumComment")) {
-		document.getElementById("textareaAlbumComment").value = '';
-	}
-
-	showVal(1, 'rate-picture-value');
-	showVal(1, 'rate-album-value');
-	document.getElementById('rate-album-range').value = 1;
-	document.getElementById('rate-picture-range').value = 1;
-	document.getElementById("album-name").value = "";
-	document.getElementById("picture-name").value = "";
-	document.getElementById("image-file").value = "";
-	document.getElementById("category-name").value = "";
-}
 
 function closePopup() {
 	document.getElementById("popup-picture").style.display = "none";
@@ -207,7 +132,6 @@ function closePopup() {
 	document.getElementById("popup-add-picture").style.display = "none";
 	document.getElementById("popup-rate-album").style.display = "none";
 	document.getElementById("popup-rate-picture").style.display = "none";
-	emptyFields();
 }
 
 function setSize() {
@@ -277,8 +201,6 @@ function showVal(newVal, id) {
 }
 
 function attachEventes() {
-	document.getElementById("add-album-submit").addEventListener("click", createAlbum);
-	document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
 	document.getElementById("rate-album-submit").addEventListener("click", rateAlbum);
 	document.getElementById("add-picture-comment-button").addEventListener("click", addCommentToPicture);
 
@@ -287,54 +209,6 @@ function attachEventes() {
 		$('#allowed-file-types').css('color', 'black');
 	});
 
-}
-
-function createPictureItem(pic) {
-	var ul = $('#album-images-container');
-
-	var url = pic.file.url;
-	var picName = pic.name;
-	var date = pic.createdAt.substr(0, 10);
-	var dateArr = date.split('-');
-	var picDate = "Date: " + dateArr[2] + '.' + dateArr[1] + '.' + dateArr[0];
-	var picId = pic.objectId;
-
-	var header = $('<header>');
-	var h3 = $('<h3>');
-	var section = $('<section>');
-	var footer = $('<footer>');
-	var img = $('<img>');
-	var a = $('<a>');
-
-	h3.text(picName);
-	img.attr('src', url);
-	a.attr('href', url).attr('download', picName).text('Download');
-
-	header.append(h3);
-
-	section.append(img).append($('<div>').attr('class', 'pic-hover').attr('data-id', picId).attr('data-src', url));
-
-	footer.append($('<section>').attr('class', 'pic-date').text(picDate)).append($('<section>').attr('class', 'pic-download').append(a)).append($('<section>').attr('id', picId).attr('class', 'pic-rating').text('Rate me'));
-
-	var li = $('<li>');
-	li.data('date', pic.createdAt);
-	li.data('id', pic.objectId);
-	li.data('rating', 'undefined');
-
-	ul.append(li.append(header).append(section).append(footer));
-	appendPictureToAlbumInAlbumView(url);
-}
-
-function appendPictureToAlbumInAlbumView(picUrl) {
-	var openedAlbum = document.getElementById('opened-album-title');
-	var albumId = openedAlbum.getAttribute('class');
-	var pictureLiInAlbumView = $('#' + albumId + " div.album-pic-holder ul li");
-
-	if (pictureLiInAlbumView.length < 4) {
-		$('#' + albumId + " div.album-pic-holder ul").first().append($('<li>').append($('<img>').attr('src', picUrl)));
-	} else {
-		$('#' + albumId + " div.album-pic-holder ul").first().append($($('<li>').append($('<img>').attr('src', picUrl))).hide());
-	}
 }
 
 $(function() {

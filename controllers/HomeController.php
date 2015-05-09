@@ -13,7 +13,7 @@ class HomeController extends BaseController {
 		$this -> getAlbums();
 	}
 
-	public function getAlbums($page = 0, $pageSize = 6) {
+	public function getAlbums($page = 0, $pageSize = 12) {
 
 		$from = $page * $pageSize;
 		$albums_result = $this -> model -> getAlbumsWithPictures($from, $pageSize);
@@ -23,8 +23,8 @@ class HomeController extends BaseController {
 		$albumCount = -1;
 
 		for ($i = 0; $i < count($albums_result); $i++) {
-			if ($album_name != $albums_result[$i]['album_name']) {
-				$album_name = $albums_result[$i]['album_name'];
+			if ($album_name != $albums_result[$i]['album_name'] . $albums_result[$i]['album_id']) {
+				$album_name = $albums_result[$i]['album_name'] . $albums_result[$i]['album_id'];
 				$pic_acount = 0;
 				$albumCount++;
 			}

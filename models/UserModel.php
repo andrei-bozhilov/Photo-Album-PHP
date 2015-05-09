@@ -33,7 +33,10 @@ class UserModel extends BaseModel {
 	
 	public function getUsersAlbums($user_id)
 	{
-		$query = "select * from albums where albums.user_id = ?";
+		$query = "
+		SELECT * 
+		FROM albums 
+		WHERE albums.user_id = ?";
 		
 		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("i", $user_id);
@@ -52,10 +55,12 @@ class UserModel extends BaseModel {
 	public function getAlbumsInfo($user_id)
 	{
 		$query = "
-		SELECT a.id, a.name, pic_count, AVG(r.value) as rating
+		SELECT a.id, a.name, c.name as category_name, IFNULL(pic_count, 0) as pic_count , AVG(r.value) as rating
 		FROM albums a
 		LEFT JOIN ratings r 
 		 on a.id = r.album_id
+		 LEFT JOIN categories c 
+		 on c.id = a.category_id
 		LEFT JOIN (select album_id, count(id) as pic_count
 		          from pictures
 		          group by album_id) p 
@@ -96,11 +101,33 @@ class UserModel extends BaseModel {
             return false;
         }
         $query = 
-        "select id from albums a
-        where a.user_id = ? and a.id = ?";
+        "
+        SELECT id
+        FROM albums a
+        WHERE a.user_id = ? AND a.id = ?";
         
         $statement = self::$db->prepare($query);
         $statement->bind_param("ii", $user_id, $album_id);
+        $statement->execute();
+		$result = $statement -> get_result();		
+				
+         return $result->num_rows > 0;
+	}
+	
+	public function checkIsPictureIsInUserAlbum($user_id, $picture_id){
+		if ($user_id == '' || $picture_id == '') {
+            return false;
+        }
+        $query = 
+        "
+        SELECT p.id
+        FROM pictures p
+        JOIN albums a
+        	on p.album_id = a.id
+        WHERE a.user_id = ? AND p.id = ?";
+        
+        $statement = self::$db->prepare($query);
+        $statement->bind_param("ii", $user_id, $picture_id);
         $statement->execute();
 		$result = $statement -> get_result();		
 				
@@ -139,6 +166,143 @@ class UserModel extends BaseModel {
          return $statement->affected_rows > 0;
 	}
 
-	
+	public function findAlbumByUser($id, $user_id) {
+		$query = "
+		SELECT a.id as id, a.name as name, c.name as category, c.id as category_id
+		FROM albums a
+		JOIN categories c
+			ON a.category_id = c.id
+		WHERE a.id = ? AND a.user_id = ?";
+		
+        $statement = self::$db->prepare($query);
+        $statement->bind_param("ii", $id, $user_id);
+        $statement->execute();
+        return $statement->get_result()->fetch_assoc();
+    }
 
+    public function createAlbum($name, $user_id, $category_id) {
+        if ($name == '') {
+            return false;
+        }
+		
+		$query = "
+		INSERT INTO `albums`(`name`, `created_date`, `user_id`, `category_id`)
+		VALUES(?, now(), ?, ?)";
+		
+        $statement = self::$db->prepare($query);
+        $statement->bind_param("sis", $name, $user_id, $category_id);
+        $statement->execute();
+        return $statement->affected_rows > 0;
+    }
+
+    public function editAlbum($id, $name, $category_id) {
+        if ($name == '') {
+            return false;
+        }
+        $query = "
+        UPDATE albums SET name = ?, category_id = ?
+        WHERE id = ?";
+		
+        $statement = self::$db->prepare($query);
+        $statement->bind_param("sii", $name, $category_id, $id);
+        $statement->execute();
+        return $statement->errno == 0;
+    }
+
+    public function deleteAlbum($id) {
+    	$query =  "
+    	DELETE FROM albums 
+    	WHERE id = ?";
+		
+        $statement = self::$db->prepare($query);
+        $statement->bind_param("i", $id);
+        $statement->execute();
+        return $statement->affected_rows > 0;
+    }
+	
+	public function getCategories(){
+		$statement = self::$db->query("SELECT * FROM categories ORDER BY id");
+        return $statement->fetch_all(MYSQLI_ASSOC);
+	}
+	
+	public function getPicturesInfo($user_id, $album_id)
+	{
+		$query = "
+		SELECT p.id as id, p.name as name, p.picture as pic, a.name as album_name, c.name as album_category
+		FROM pictures p
+		JOIN albums a
+			ON p.album_id = a.id
+		JOIN categories c
+			ON a.category_id = c.id
+		WHERE a.user_id = ?
+		AND a.id = ?
+		ORDER BY p.id";
+		
+		$statement = self::$db -> prepare($query);
+		$statement -> bind_param("ii", $user_id, $album_id);
+		$statement -> execute();
+		$result = $statement -> get_result();
+		$fetch_result = array();
+		
+		while ($row = $result -> fetch_array(MYSQLI_ASSOC)) {
+			$fetch_result[] = $row;
+			
+		};
+
+		return $fetch_result;
+	}
+	
+	public function findPictureByUser($user_id, $picture_id) {
+		$query = "
+		SELECT p.name as name, p.picture as pic, a.name as album_name, a.id as album_id
+        FROM pictures p
+        JOIN albums a
+        	on p.album_id = a.id
+        WHERE a.user_id = ? AND p.id = ?";
+		
+        $statement = self::$db->prepare($query);
+        $statement->bind_param("ii", $user_id, $picture_id);
+        $statement->execute();
+        return $statement->get_result()->fetch_assoc();
+    }
+	
+	public function createPicture($name, $picture, $album_id) {
+        if ($name == '' || $album_id == '') {
+            return false;
+        }
+		
+		$query = "
+		INSERT INTO `pictures`(`name`, `picture`, `created_date`, `is_public`, `album_id`)
+		VALUES (?,?,now(),1,?)";
+	    $null = NULL;
+		
+        $statement = self::$db->prepare($query);
+        $statement->bind_param("sbi", $name, $null, $album_id);
+		$statement->send_long_data(1, $picture);
+        
+        $statement->execute();
+        return $statement->affected_rows > 0;
+    }
+    
+    public function deletePicture($id) {
+    	$query =  "
+    	DELETE FROM pictures 
+    	WHERE id = ?";
+		
+        $statement = self::$db->prepare($query);
+        $statement->bind_param("i", $id);
+        $statement->execute();
+        return $statement->affected_rows > 0;
+    }
+	
+	public function deletePictureByAlbum($album_id) {
+    	$query =  "
+    	DELETE FROM pictures 
+    	WHERE album_id = ?";
+		
+        $statement = self::$db->prepare($query);
+        $statement->bind_param("i", $album_id);
+        $statement->execute();
+        return $statement->affected_rows > 0;
+    }
 }

@@ -1,7 +1,7 @@
 <?php if (count($this->albums) == 0) :?>
 		<div class="jumbotron">
 			<h3>
-				Opps, no albums yet. Don't worry.  <a href="/user/user_albums"><span class="label label-success">Here</span></a> is a good place to start. :)
+				Opps, no albums yet. Don't worry.  <a href="/user/albums"><span class="label label-success">Here</span></a> is a good place to start. :)
 			</h3>
 				</div>
 <?php endif ?>

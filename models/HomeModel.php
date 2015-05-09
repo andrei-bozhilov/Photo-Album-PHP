@@ -12,10 +12,10 @@ class HomeModel extends BaseModel {
 		    LEFT JOIN ratings r
 		 ON a.id = r.album_id
          GROUP BY a.id, a.name, a.created_date
-		    LIMIt ?, ?) a
+		    LIMIT ?, ?) a
 		 ON a.album_id = p.album_id
 		WHERE p.is_public = true
-		ORDER BY a.created_date DESC";
+		ORDER BY a.album_rating DESC";
 
 		
 		$statement = self::$db -> prepare($query);
@@ -81,7 +81,7 @@ class HomeModel extends BaseModel {
 		FROM pictures p
 		WHERE p.is_public = true
 		AND p.picture IS NOT NULL
-		ORDER BY p.created_date DESC
+		ORDER BY p.id DESC
 		LIMIT 20
 		";
 		
