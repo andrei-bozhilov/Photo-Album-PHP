@@ -99,7 +99,7 @@ abstract class BaseController {
 	}
 
 	protected function getUserId() {
-		$user = $this -> account_model -> getCurrentUser($this -> getUsername());
+		$user = $this -> account_model -> getCurrentUser($this -> getUsername());	
 		return $user['id'];
 	}
 

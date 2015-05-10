@@ -21,14 +21,18 @@ class HomeModel extends BaseModel {
 		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("ii", $from, $pageSize);
 		$statement -> execute();
-		$result = $statement -> get_result();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		return $fetch_result;
+		/*$result = $statement -> get_result();
 		$fetch_result = array();
 		
 		while ($row = $result -> fetch_array(MYSQLI_ASSOC)) {
 			$fetch_result[] = $row;
-		};
+		};*/
 
-		return $fetch_result;
+		
 	}
 	
 	public function getAlbumWithPicturesById($id, $from, $pageSize) {
@@ -44,14 +48,19 @@ class HomeModel extends BaseModel {
 		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("iii", $id, $from, $pageSize);
 		$statement -> execute();
-		$result = $statement -> get_result();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		return $fetch_result;
+		
+		/*$result = $statement -> get_result();
 		$fetch_result = array();
 		
 		while ($row = $result -> fetch_array(MYSQLI_ASSOC)) {
 			$fetch_result[] = $row;
 		};
 
-		return $fetch_result;
+		return $fetch_result;*/
 	}
 	
 	public function getAlbumRating($id)
@@ -65,14 +74,19 @@ class HomeModel extends BaseModel {
 		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("i", $id);
 		$statement -> execute();
-		$result = $statement -> get_result();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		return $fetch_result;
+		
+		/*$result = $statement -> get_result();
 		$fetch_result = array();
 		
 		while ($row = $result -> fetch_array(MYSQLI_ASSOC)) {
 			$fetch_result[] = $row;
 		};
 
-		return $fetch_result;
+		return $fetch_result;*/
 	}
 	
 	public function getNewestPictures(){
@@ -85,8 +99,16 @@ class HomeModel extends BaseModel {
 		LIMIT 20
 		";
 		
-		$statement = self::$db->query($query);
-        return $statement->fetch_all(MYSQLI_ASSOC);
+		
+		$result = self::$db->query($query);
+		$fetch_result = $this->fetch($result);
+		return $fetch_result;
+		
+		/*$results_array = array();
+		while ($row = $result->fetch_assoc()) {
+		  $results_array[] = $row;
+		}
+		return $results_array;	*/	
 	}
 	
 	public function getAlbumById($id){
@@ -100,14 +122,19 @@ class HomeModel extends BaseModel {
 		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("i", $id);
 		$statement -> execute();
-		$result = $statement -> get_result();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		return $fetch_result;
+		
+		/*$result = $statement -> get_result();
 		$fetch_result = array();
 		
 		while ($row = $result -> fetch_array(MYSQLI_ASSOC)) {
 			$fetch_result[] = $row;
 		};
 
-		return $fetch_result;
+		return $fetch_result;*/
 	}
 	
 	public function getAlbumComments($id){
@@ -123,14 +150,19 @@ class HomeModel extends BaseModel {
 		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("i", $id);
 		$statement -> execute();
-		$result = $statement -> get_result();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		return $fetch_result;
+		
+		/*$result = $statement -> get_result();
 		$fetch_result = array();
 		
 		while ($row = $result -> fetch_array(MYSQLI_ASSOC)) {
 			$fetch_result[] = $row;
 		};
 
-		return $fetch_result;
+		return $fetch_result;*/
 	}
 	
 	public function getPictureComments($id)
@@ -147,6 +179,11 @@ class HomeModel extends BaseModel {
 		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("i", $id);
 		$statement -> execute();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		return $fetch_result;
+		/*
 		$result = $statement -> get_result();
 		$fetch_result = array();
 		
@@ -154,6 +191,6 @@ class HomeModel extends BaseModel {
 			$fetch_result[] = $row;
 		};
 
-		return $fetch_result;
+		return $fetch_result;*/
 	}
 }

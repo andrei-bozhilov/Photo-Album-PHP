@@ -20,6 +20,11 @@ class UserModel extends BaseModel {
 		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("sii", $user_id, $from, $pageSize);
 		$statement -> execute();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		return $fetch_result;
+		/*
 		$result = $statement -> get_result();
 		$fetch_result = array();
 		
@@ -28,7 +33,7 @@ class UserModel extends BaseModel {
 			
 		};
 
-		return $fetch_result;
+		return $fetch_result;*/
 	}
 	
 	public function getUsersAlbums($user_id)
@@ -41,6 +46,11 @@ class UserModel extends BaseModel {
 		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("i", $user_id);
 		$statement -> execute();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		return $fetch_result;
+		/*
 		$result = $statement -> get_result();
 		$fetch_result = array();
 		
@@ -49,7 +59,7 @@ class UserModel extends BaseModel {
 			
 		};
 
-		return $fetch_result;
+		return $fetch_result;*/
 	}
 	
 	public function getAlbumsInfo($user_id)
@@ -71,6 +81,11 @@ class UserModel extends BaseModel {
 		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("i", $user_id);
 		$statement -> execute();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		return $fetch_result;
+		/*
 		$result = $statement -> get_result();
 		$fetch_result = array();
 		
@@ -79,7 +94,7 @@ class UserModel extends BaseModel {
 			
 		};
 
-		return $fetch_result;
+		return $fetch_result;*/
 	}
 	
 	public function rateAlbum($album_id, $value, $user_id){
@@ -93,7 +108,7 @@ class UserModel extends BaseModel {
         $statement = self::$db->prepare($query);
         $statement->bind_param("iii", $value, $user_id, $album_id);
         $statement->execute();
-         return $statement->affected_rows > 0;
+        return $statement->affected_rows > 0;
 	}
 	
 	public function checkIsAlbumOwnByUser($album_id, $user_id){
@@ -109,9 +124,10 @@ class UserModel extends BaseModel {
         $statement = self::$db->prepare($query);
         $statement->bind_param("ii", $user_id, $album_id);
         $statement->execute();
+		
 		$result = $statement -> get_result();		
 				
-         return $result->num_rows > 0;
+        return $result->num_rows > 0;
 	}
 	
 	public function checkIsPictureIsInUserAlbum($user_id, $picture_id){
@@ -148,7 +164,7 @@ class UserModel extends BaseModel {
         $statement = self::$db->prepare($query);
         $statement->bind_param("sii", $text, $user_id, $picture_id);
         $statement->execute();
-         return $statement->affected_rows > 0;
+        return $statement->affected_rows > 0;
 	}
 	
 	public function addCommentToAlbum($text, $user_id, $album_id){
@@ -163,7 +179,7 @@ class UserModel extends BaseModel {
         $statement = self::$db->prepare($query);
         $statement->bind_param("sii", $text, $user_id, $album_id);
         $statement->execute();
-         return $statement->affected_rows > 0;
+        return $statement->affected_rows > 0;
 	}
 
 	public function findAlbumByUser($id, $user_id) {
@@ -177,7 +193,13 @@ class UserModel extends BaseModel {
         $statement = self::$db->prepare($query);
         $statement->bind_param("ii", $id, $user_id);
         $statement->execute();
-        return $statement->get_result()->fetch_assoc();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		return $fetch_result[0];
+		
+		/*
+        return $statement->get_result()->fetch_assoc();*/
     }
 
     public function createAlbum($name, $user_id, $category_id) {
@@ -241,6 +263,11 @@ class UserModel extends BaseModel {
 		$statement = self::$db -> prepare($query);
 		$statement -> bind_param("ii", $user_id, $album_id);
 		$statement -> execute();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		return $fetch_result;
+		/*
 		$result = $statement -> get_result();
 		$fetch_result = array();
 		
@@ -249,7 +276,7 @@ class UserModel extends BaseModel {
 			
 		};
 
-		return $fetch_result;
+		return $fetch_result;*/
 	}
 	
 	public function findPictureByUser($user_id, $picture_id) {
@@ -263,7 +290,12 @@ class UserModel extends BaseModel {
         $statement = self::$db->prepare($query);
         $statement->bind_param("ii", $user_id, $picture_id);
         $statement->execute();
-        return $statement->get_result()->fetch_assoc();
+        
+        $statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		return $fetch_result[0];
+		/*
+        return $statement->get_result()->fetch_assoc();*/
     }
 	
 	public function createPicture($name, $picture, $album_id) {

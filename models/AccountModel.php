@@ -5,6 +5,19 @@ class AccountModel extends BaseModel {
 		$statement = self::$db -> prepare("SELECT id, username, password, is_admin FROM users WHERE username = ?");
 		$statement -> bind_param("s", $username);
 		$statement -> execute();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+		
+		
+		if (password_verify($password, $fetch_result[0]['password'])) {
+			return true;
+		}
+
+		return "Invalid username or password.";
+		
+		
+		/*
 
 		$result = $statement -> get_result() -> fetch_assoc();
 	
@@ -12,7 +25,7 @@ class AccountModel extends BaseModel {
 			return true;
 		}
 
-		return "Invalid username or password.";
+		return "Invalid username or password.";*/
 	}
 
 	public function register($username, $password) {
@@ -20,9 +33,10 @@ class AccountModel extends BaseModel {
 		$statement -> bind_param("s", $username);
 		$statement -> execute();
 
-		$result = $statement -> get_result() -> fetch_assoc();
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
 
-		if ($result['Count(id)']) {
+		if ($fetch_result[0]['Count(id)']) {
 			return "Username is taken.";
 		}
 
@@ -38,7 +52,14 @@ class AccountModel extends BaseModel {
 		$statement = self::$db -> prepare("SELECT * FROM users WHERE username = ?");
 		$statement -> bind_param("s", $username);
 		$statement -> execute();
-		return $statement -> get_result() -> fetch_assoc();
+		
+		$statement->store_result();
+		$fetch_result = $this->fetch($statement);
+			
+		return $fetch_result[0];
+		/*
+		$statement -> execute();
+		return $statement -> get_result() -> fetch_assoc();*/
 	}
 
 }

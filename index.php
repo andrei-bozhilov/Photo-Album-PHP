@@ -1,8 +1,8 @@
 <?php
-
 session_start();
 
 include_once ('includes/config.php');
+include_once ('includes/password.php');
 
 // Extract the $controllerName, $actionName and $params from the HTTP request
 $requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
